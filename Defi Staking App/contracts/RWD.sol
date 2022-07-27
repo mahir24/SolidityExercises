@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity ^0.5.0;
 
 contract RWD{
     string public name = 'Reward Token';
@@ -24,7 +24,7 @@ contract RWD{
     mapping (address => mapping(address => uint256)) public allowance; //map into mapping 
 
     //balance of the current contract should be set to the total supple because msg.sender is the contract
-    constructor() {
+    constructor() public{
         balanceOf[msg.sender] = totalSupply;
     }
 
