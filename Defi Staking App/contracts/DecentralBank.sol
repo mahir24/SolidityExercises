@@ -46,18 +46,17 @@ function depositTokens(uint _amount) public {
 
 //issue rewards
 function issueTokens() public {
-  //require owner to issue tokens only
-  require(msg.sender == owner, 'caller must be owner');
+    // Only owner can call this function
+    require(msg.sender == owner, 'caller must be the owner');
 
-  for (uint i =0; i<=stakers.length; i++) {
-    address recipient = stakers[i];
-    
-    uint balance = stakingBalance[recipient]/9;
-
-    if(balance > 0) {
-      rwd.transfer(recipient, balance); 
+    // issue tokens to all stakers
+    for (uint i=0; i<stakers.length; i++) {
+        address recipient = stakers[i]; 
+        uint balance = stakingBalance[recipient] / 9;
+        if(balance > 0) {
+          rwd.transfer(recipient, balance);
+       }
     }
-  }
 }
 
 //unstake tokens
