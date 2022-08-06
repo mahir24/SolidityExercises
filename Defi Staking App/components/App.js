@@ -5,7 +5,7 @@ import Web3 from 'web3';
 import Tether from '../truffle_abis/Tether.json'
 import RWD from '../truffle_abis/RWD.json'
 import DecentralBank from '../truffle_abis/DecentralBank.json'
-
+import Main from './Main'
 
 class App extends Component {
 
@@ -91,6 +91,28 @@ class App extends Component {
         this.setState({loading: false})
 
     }
+
+    //stake function
+    stakeTokens = (amount) => {
+        this.setState({loading: true})
+        //tether approves transactions to and from decentral Bank
+        this.state.tether.methods.approve(this.state.decentralBank._address, amount).send({from:this.state.account}).on('transactionHash', (hash) => {this.setState({loading: false})})
+        //use the function depositTokens from decentralBank to send X amount of tokens from 'this' account using the transaction hash to change the loading state
+        this.state.decentralBank.methods.depositTokens(amount).send({from:this.state.account}).on('transactionHash', (hash) => {this.setState({loading: false})})
+    }
+    //unstake function
+    unstakeTokens = (amount) => {
+        this.setState({loading: true})
+        //use the function depositTokens from decentralBank to send X amount of tokens from 'this' account using the transaction hash to change the loading state
+        this.state.decentralBank.methods.unstakeTokens(amount).send({from:this.state.account}).on('transactionHash', (hash) => {this.setState({loading: false})})
+    }
+    //leverge decentralBank contract to deposit and unstake tokens
+
+    //depositTokens transferFrom
+
+    //approve transactionHash
+
+    //staking function >> decentralBank.depositTokens(send transactionHash)
     constructor(props) {
         super(props)
         this.state = {
@@ -108,12 +130,37 @@ class App extends Component {
     }
     //react code will render to the webpage
     render() {
+        //loading
+        let content
+        //if loading is set to true show loading message, if false set the content to Main.js
+        {this.state.loading ? 
+            content = <p id ='loader' className='text-center' style = {{margin: '30px'}}>
+            LOADING... </p>
+         :
+            content = <Main 
+            tetherBalance = {this.state.tetherBalance}
+            rwdBalance = {this.state.rwdBalance}
+            stakingBalance = {this.state.stakingBalance}
+
+            stakeTokens = {this.stakeTokens} //bring in stakeTokens function
+            unstakeTokens = {this.unstakeTokens} //bring in stakeTokens function
+
+            />
+        }
         return (
             <div>
+                {/* load in nav bar with account connected */}
                 <Navbar account={this.state.account}/>
             
-                <div className='text-center'>
-                    {console.log(this.state.loading)}
+                <div className='container-fluid mt-5'>
+                    <div className="row">
+                        <main role="main" className="col-lg-12 ml-auto mr-auto" style={{ maxWidth: '600px', minHeight: '100vm'}}>
+                            <div>
+                                {/* Bring in Main.js and load it  */}
+                                {content}
+                            </div>
+                        </main>
+                    </div> 
                 </div>
             </div>
         )
