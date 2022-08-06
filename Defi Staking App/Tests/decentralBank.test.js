@@ -96,7 +96,7 @@ contract('decentralBank', ([owner, customer]) => {    //[owner, customer] just n
                 await decentralBank.issueTokens({from: customer}).should.be.rejected;
 
                 //unstake tokens
-                await decentralBank.unstakeTokens({from: owner})
+                await decentralBank.unstakeTokens({from: customer})
 
                 //Check unstaking balances
                 result = await tether.balanceOf(customer)
