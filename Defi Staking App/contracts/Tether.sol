@@ -50,7 +50,7 @@ contract Tether{
         require(balanceOf[_from] >= _value);//require that the balance available is greater than the amount being sent
         require(_value <= allowance[_from][msg.sender]);
 
-        balanceOf[msg.sender] -= _value; //the balance is deducted by the value of the transfer
+        balanceOf[_from] -= _value; //the balance is deducted by the value of the transfer
         balanceOf[_to] += _value; //balance of the address being sent to is being added
 
         allowance[msg.sender][_from] -= _value; //callers allowance from the sender is reduced from the amount
